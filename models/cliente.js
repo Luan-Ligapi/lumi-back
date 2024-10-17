@@ -9,6 +9,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true
+    },
+    numeroCliente: {  // Adicione este campo
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
     }
   }, {
     schema: 'lumi', // Define o schema onde a tabela será criada
