@@ -1,0 +1,26 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // Use a variável de ambiente do .env para a conexão
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Cliente {
+  id         Int       @id @default(autoincrement())
+  nome       String
+  email      String    @unique
+  faturas    Fatura[]
+}
+
+model Fatura {
+  id              Int      @id @default(autoincrement())
+  clienteId       Int
+  data_emissao    DateTime
+  valor_total     Float
+  numero_fatura   String   @unique
+
+  // Relação com Cliente
+  cliente         Cliente  @relation(fields: [clienteId], references: [id])
+}
