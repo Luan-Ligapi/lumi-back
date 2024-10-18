@@ -16,6 +16,9 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
+// Adicionando log de inicialização
+console.log('Iniciando conexão com banco de dados usando Sequelize.');
+
 fs
   .readdirSync(__dirname)
   .filter(file => {
@@ -39,5 +42,8 @@ Object.keys(db).forEach(modelName => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+// Log final após inicialização
+console.log('Conexão com banco de dados estabelecida com sucesso.');
 
 module.exports = db;

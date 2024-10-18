@@ -14,9 +14,8 @@
     "database": "postgres",
     "host": "131.221.178.38",
     "dialect": "postgres",
-    "schema": "lumi"
-
-
+    "schema": "lumi",
+    "sync": { "force": false } 
   },
   "production": {
     "username": "lumi",

@@ -25,5 +25,11 @@ module.exports = (sequelize, DataTypes) => {
   Fatura.associate = function(models) {
     Fatura.belongsTo(models.Cliente, { foreignKey: 'clienteId' });
   };
+
+  // Função para adicionar logs de validação
+  Fatura.beforeValidate((fatura, options) => {
+    console.log('Validando fatura:', fatura);
+  });
+
   return Fatura;
 };

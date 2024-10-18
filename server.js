@@ -20,5 +20,13 @@ app.use('/upload', uploadRoutes);
 // Rota para documentação Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// Iniciar o servidor somente se o arquivo não for importado em testes
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+    console.log(`Swagger docs: http://localhost:${PORT}/api-docs`);
+  });
+}
 
 module.exports = app;
