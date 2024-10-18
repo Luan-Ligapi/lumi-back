@@ -110,20 +110,25 @@
             "name": "Faturas",
             "item": [
                 {
-                    "name": "Listar todas as faturas",
+                    "name": "Listar faturas por cliente e ano",
                     "request": {
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "http://localhost:3000/faturas",
+                            "raw": "http://localhost:3000/faturas?numeroCliente=123456&ano=2024",
                             "protocol": "http",
                             "host": ["localhost"],
                             "port": "3000",
-                            "path": ["faturas"]
+                            "path": ["faturas"],
+                            "query": [
+                                { "key": "numeroCliente", "value": "123456" },
+                                { "key": "ano", "value": "2024" }
+                            ]
                         }
                     },
                     "response": []
-                },
+                }
+                ,
                 {
                     "name": "Criar uma nova fatura",
                     "request": {

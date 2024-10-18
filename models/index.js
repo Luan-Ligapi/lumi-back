@@ -3,22 +3,21 @@
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
-const process = require('process');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
 
 let sequelize;
+
+// Verificar se a variável de ambiente está definida corretamente
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
-// Adicionando log de inicialização
-console.log('Iniciando conexão com banco de dados usando Sequelize.');
-
+// Carregar todos os modelos
 fs
   .readdirSync(__dirname)
   .filter(file => {
@@ -42,8 +41,5 @@ Object.keys(db).forEach(modelName => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-
-// Log final após inicialização
-console.log('Conexão com banco de dados estabelecida com sucesso.');
 
 module.exports = db;

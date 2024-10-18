@@ -1,5 +1,8 @@
 const express = require('express');
+const cors = require('cors');
+
 const app = express();
+app.use(cors());  // Isso permite que qualquer origem acesse a API
 
 // Certifique-se de que os caminhos estão corretos
 const clienteRoutes = require('./routes/cliente');  // Caminho correto

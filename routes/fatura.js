@@ -1,36 +1,58 @@
 const express = require('express');
 const router = express.Router();
 const { Cliente, Fatura } = require('../models');
+const { Op } = require('sequelize');  // Importa apenas os operadores do Sequelize
 
 // Obter todas as faturas
 router.get('/', async (req, res) => {
-  const { numeroCliente, mesReferencia } = req.query;
+  const { numeroCliente, ano } = req.query;
 
-  if (!numeroCliente) {
-    return res.status(400).json({ error: 'numeroCliente é obrigatório' });
-  }
+  let whereClause = {};
 
-  try {
+  // Se o cliente for informado, buscar pelo cliente
+  if (numeroCliente) {
     const cliente = await Cliente.findOne({ where: { numeroCliente } });
     if (!cliente) {
+      console.log('Cliente não encontrado:', numeroCliente);
       return res.status(404).json({ error: 'Cliente não encontrado' });
     }
+    whereClause.clienteId = cliente.id;  // Adicionar clienteId à cláusula de busca
+    console.log(`Cliente encontrado: ${cliente.id}`);
+  }
 
-    const whereCondition = { clienteId: cliente.id };
-    if (mesReferencia) {
-      whereCondition.mesReferencia = mesReferencia;
-    }
+  // Se o ano for informado, definir o intervalo de datas para o ano solicitado
+  if (ano) {
+    const startOfYear = new Date(`${ano}-01-01T00:00:00.000Z`);
+    const endOfYear = new Date(`${ano}-12-31T23:59:59.999Z`);
+    
+    // Usar 'Op.between' para o intervalo de datas
+    whereClause.data_emissao = {
+      [Op.between]: [startOfYear, endOfYear]  // Op.between garante o uso correto do operador BETWEEN
+    };
+    console.log(`Procurando faturas entre ${startOfYear} e ${endOfYear}`);
+  }
+  
+  try {
+    const faturas = await Fatura.findAll({
+      where: whereClause  // Usar a cláusula de filtro, vazia se nenhum filtro for informado
+    });
 
-    const faturas = await Fatura.findAll({ where: whereCondition });
     if (faturas.length === 0) {
+      console.log('Nenhuma fatura encontrada com os parâmetros fornecidos.');
       return res.status(404).json({ error: 'Nenhuma fatura encontrada' });
     }
 
+    console.log(`Faturas encontradas: ${faturas.length}`);
     res.json(faturas);
   } catch (error) {
+    console.error('Erro ao buscar faturas:', error);
     res.status(500).json({ error: 'Erro ao buscar faturas' });
   }
 });
+
+
+
+
 
 // Criar nova fatura
 router.post('/', async (req, res) => {
