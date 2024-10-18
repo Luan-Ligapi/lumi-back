@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const pdfParser = require('./pdfParser');
+const pdfParser = require('../utils/pdfParser');
 const path = require('path');
 const router = express.Router();
 

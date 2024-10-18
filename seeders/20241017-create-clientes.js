@@ -1,33 +1,41 @@
 'use strict';
 
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('Clientes', [
-      {
-        nome: 'João da Silva',
-        email: 'joao@example.com',
-        numeroCliente: '123456',
-        createdAt: new Date(),
-        updatedAt: new Date(),
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('Clientes', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
       },
-      {
-        nome: 'Maria Oliveira',
-        email: 'maria@example.com',
-        numeroCliente: '654321',
-        createdAt: new Date(),
-        updatedAt: new Date(),
+      nome: {
+        type: Sequelize.STRING,
+        allowNull: false
       },
-      {
-        nome: 'Carlos Santos',
-        email: 'carlos@example.com',
-        numeroCliente: '789012',
-        createdAt: new Date(),
-        updatedAt: new Date(),
+      email: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
+      },
+      numeroCliente: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
-    ]);
+    });
   },
 
-  down: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('Clientes', null, {});
+  async down(queryInterface) {
+    await queryInterface.dropTable('Clientes');
   }
 };

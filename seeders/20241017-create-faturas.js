@@ -1,36 +1,50 @@
 'use strict';
 
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('Faturas', [
-      {
-        clienteId: 1, // Referência ao cliente "João da Silva"
-        data_emissao: '2024-09-30',
-        valor_total: 500.00,
-        numero_fatura: '12345678',
-        createdAt: new Date(),
-        updatedAt: new Date(),
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('Faturas', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
       },
-      {
-        clienteId: 2, // Referência ao cliente "Maria Oliveira"
-        data_emissao: '2024-10-04',
-        valor_total: 300.00,
-        numero_fatura: '87654321',
-        createdAt: new Date(),
-        updatedAt: new Date(),
+      clienteId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Clientes',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
-      {
-        clienteId: 3, // Referência ao cliente "Carlos Santos"
-        data_emissao: '2024-10-10',
-        valor_total: 450.00,
-        numero_fatura: '78901234',
-        createdAt: new Date(),
-        updatedAt: new Date(),
+      data_emissao: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      valor_total: {
+        type: Sequelize.FLOAT,
+        allowNull: false
+      },
+      numero_fatura: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
-    ]);
+    });
   },
 
-  down: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('Faturas', null, {});
+  async down(queryInterface) {
+    await queryInterface.dropTable('Faturas');
   }
 };
