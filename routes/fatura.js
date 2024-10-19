@@ -37,10 +37,7 @@ router.get('/', async (req, res) => {
       where: whereClause  // Usar a cláusula de filtro, vazia se nenhum filtro for informado
     });
 
-    if (faturas.length === 0) {
-      console.log('Nenhuma fatura encontrada com os parâmetros fornecidos.');
-      return res.status(404).json({ error: 'Nenhuma fatura encontrada' });
-    }
+
 
     console.log(`Faturas encontradas: ${faturas.length}`);
     res.json(faturas);
@@ -56,35 +53,36 @@ router.get('/', async (req, res) => {
 
 // Criar nova fatura
 router.post('/', async (req, res) => {
-    try {
-        const { numeroCliente, data_emissao, valor_total, numero_fatura } = req.body;
+  try {
+    const { numeroCliente, data_emissao, valor_total, numero_fatura, pdf_link } = req.body;
 
-        console.log('Dados recebidos para criação de fatura:', req.body);
+    console.log('Dados recebidos para criação de fatura:', req.body);
 
-        // Verificar se o número da fatura já existe
-        const faturaExistente = await Fatura.findOne({ where: { numero_fatura } });
-        if (faturaExistente) {
-            return res.status(400).json({ error: 'Erro ao criar fatura: número duplicado' });
-        }
-
-        const cliente = await Cliente.findOne({ where: { numeroCliente } });
-        if (!cliente) {
-            return res.status(404).json({ error: 'Cliente não encontrado' });
-        }
-
-        const novaFatura = await Fatura.create({
-            clienteId: cliente.id,
-            data_emissao,
-            valor_total,
-            numero_fatura
-        });
-
-        console.log('Fatura criada com sucesso:', novaFatura);
-        return res.status(201).json(novaFatura);
-    } catch (error) {
-        console.error('Erro ao criar fatura:', error.message);
-        return res.status(500).json({ error: 'Erro ao criar fatura' });
+    // Verificar se o número da fatura já existe
+    const faturaExistente = await Fatura.findOne({ where: { numero_fatura } });
+    if (faturaExistente) {
+      return res.status(400).json({ error: 'Erro ao criar fatura: número duplicado' });
     }
+
+    const cliente = await Cliente.findOne({ where: { numeroCliente } });
+    if (!cliente) {
+      return res.status(404).json({ error: 'Cliente não encontrado' });
+    }
+
+    const novaFatura = await Fatura.create({
+      clienteId: cliente.id,
+      data_emissao,
+      valor_total,
+      numero_fatura,
+      pdf_link  // Adicionar o link do PDF
+    });
+
+    console.log('Fatura criada com sucesso:', novaFatura);
+    return res.status(201).json(novaFatura);
+  } catch (error) {
+    console.error('Erro ao criar fatura:', error.message);
+    return res.status(500).json({ error: 'Erro ao criar fatura' });
+  }
 });
 
 
