@@ -1,0 +1,27 @@
+
+{
+  "classe": "Bifásico",  //
+  "subclasse": "Comercial", //
+  "modTarifa": "Convencional B3",//
+  "nome": "JOSE MESALY FONSECA DE CARVALHO", //
+  "rg": "52024156", //
+  "endereco": "RUA RAUL CORREA 347 FD",//
+  "cep": "39401-029",//
+  "cidade": "MONTES CLAROS",//
+  "estado": "MG",//
+  "numCliente": "7204076116",
+  "numIstalacao": "3001116735",
+  "mesReferencia": "JAN/2024",
+  "vencimento": "12/02/2024",
+  "totalPagar": "107,38",
+
+  "valoreFaturados": {
+    "energiaEletrica": {"unidade": "kWh", "quantidade": "50", "precoUnit": "0,95543124", "valor": "47,75", "tarifaUnit": "0,74906000"},
+    "energiaSCEESICMS":  {"unidade": "kWh", "quantidade": "456", "precoUnit": "0,50970610", "valor": "232,42", "tarifaUnit": "0,48733000"},
+    "energiaCompensadaGD": {"unidade": "kWh", "quantidade": "456", "precoUnit": "0,48733000", "valor": "-222,22", "tarifaUnit": "0,48733000"},
+    "contribuicaoIluminacao": {"valor": "49,43"},
+    "total": "107,38"
+  },
+
+}
+
