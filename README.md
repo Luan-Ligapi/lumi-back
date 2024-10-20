@@ -89,7 +89,6 @@
     │   └── upload.js
     ├── seeders
     ├── server.js
-    ├── swagger.js
     ├── tests
     ├── upload
     └── utils
