@@ -23,7 +23,7 @@ app.use('/upload', uploadRoutes);
 
 // Iniciar o servidor somente se o arquivo não for importado em testes
 if (require.main === module) {
-  const PORT = process.env.PORT || 3000;
+  const PORT = process.env.PORT || 8080;
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });

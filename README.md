@@ -115,7 +115,7 @@ Use uma ferramenta como Postman ou cURL para fazer o upload de um PDF:
 
 bash
 Copiar código
-curl -X POST http://localhost:3000/upload -F 'file=@/caminho/para/o/arquivo.pdf'
+curl -X POST http://localhost:8080/upload -F 'file=@/caminho/para/o/arquivo.pdf'
 Isso processará o PDF e salvará os dados extraídos no banco de dados.
 
 Funcionalidades do Projeto

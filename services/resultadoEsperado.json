@@ -17,8 +17,8 @@
 
   "valoreFaturados": {
     "energiaEletrica": {"unidade": "kWh", "quantidade": "50", "precoUnit": "0,95543124", "valor": "47,75", "tarifaUnit": "0,74906000"},
-    "energiaSCEESICMS":  {"unidade": "kWh", "quantidade": "456", "precoUnit": "0,50970610", "valor": "232,42", "tarifaUnit": "0,48733000"},
-    "energiaCompensadaGD": {"unidade": "kWh", "quantidade": "456", "precoUnit": "0,48733000", "valor": "-222,22", "tarifaUnit": "0,48733000"},
+    "energiaSCEESICMS":  {"unidade": "kWh", "quantidade": "456", "precoUnit": "0,50970610", "valor": "232,42", "tarifaUnit": "0,48738080"},
+    "energiaCompensadaGD": {"unidade": "kWh", "quantidade": "456", "precoUnit": "0,48738080", "valor": "-222,22", "tarifaUnit": "0,48738080"},
     "contribuicaoIluminacao": {"valor": "49,43"},
     "total": "107,38"
   },
