@@ -8,6 +8,7 @@ app.use(cors());  // Isso permite que qualquer origem acesse a API
 const clienteRoutes = require('./routes/cliente');  // Caminho correto
 const faturaRoutes = require('./routes/fatura');    // Caminho correto
 const uploadRoutes = require('./routes/upload');    // Caminho correto
+const downloadRoutes = require('./routes/download');    // Caminho correto
 
 // Importar Swagger (se necessário)
 const { swaggerUi, swaggerSpec } = require('./swagger');
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use('/clientes', clienteRoutes);
 app.use('/faturas', faturaRoutes);
 app.use('/upload', uploadRoutes);
+app.use('/download', downloadRoutes);
 
 // Rota para documentação Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

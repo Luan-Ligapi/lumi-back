@@ -64,6 +64,10 @@ module.exports = (sequelize, DataTypes) => {
     itens_faturados: {
       type: DataTypes.JSONB,
       allowNull: true
+    },
+    file_name: {
+      type: DataTypes.STRING,
+      allowNull: true
     }
   }, {
     schema: 'lumi',

@@ -26,8 +26,8 @@ router.get('/', async (req, res) => {
     const endOfYear = new Date(`${ano}-12-31T23:59:59.999Z`);
     
     // Usar 'Op.between' para o intervalo de datas
-    whereClause.data_emissao = {
-      [Op.between]: [startOfYear, endOfYear]  // Op.between garante o uso correto do operador BETWEEN
+    whereClause.referencia_mes = {
+      [Op.like]: `%${ano}%`
     };
     console.log(`Procurando faturas entre ${startOfYear} e ${endOfYear}`);
   }

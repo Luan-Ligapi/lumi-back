@@ -74,6 +74,7 @@ router.post('/', upload.single('file'), async (req, res) => {
     // Criar nova fatura no banco de dados
     const novaFatura = await Fatura.create({
       clienteId: cliente.id,
+      file_name: file.originalname,
       numero_fatura: dadosFatura.numInstalacao,
       valor_total: parseFloat(dadosFatura.totalPagar) || 0, // Certifica-se que valor é um número
       referencia_mes: dadosFatura.mesReferencia,
