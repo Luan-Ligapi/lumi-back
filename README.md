@@ -1,123 +1,179 @@
+<p align="center">
+  <img src="https://img.icons8.com/?size=512&id=55494&format=png" width="20%" alt="LUMI-BACK-logo">
+</p>
+<p align="center">
+    <h1 align="center">LUMI-BACK</h1>
+</p>
+<p align="center">
+    <em><code>❯ Projeto teste seletivo Lumi</code></em>
+</p>
+<p align="center">
+	<img src="https://img.shields.io/github/license/Luan-Ligapi/lumi-back?style=flat&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
+	<img src="https://img.shields.io/github/last-commit/Luan-Ligapi/lumi-back?style=flat&logo=git&logoColor=white&color=0080ff" alt="last-commit">
+	<img src="https://img.shields.io/github/languages/top/Luan-Ligapi/lumi-back?style=flat&color=0080ff" alt="repo-top-language">
+	<img src="https://img.shields.io/github/languages/count/Luan-Ligapi/lumi-back?style=flat&color=0080ff" alt="repo-language-count">
+</p>
+<p align="center">
+		<em>feito usando as seguintes tecnologias:</em>
+</p>
+<p align="center">
+	<img src="https://img.shields.io/badge/JavaScript-F7DF1E.svg?style=flat&logo=JavaScript&logoColor=black" alt="JavaScript">
+	<img src="https://img.shields.io/badge/YAML-CB171E.svg?style=flat&logo=YAML&logoColor=white" alt="YAML">
+	<img src="https://img.shields.io/badge/Jest-C21325.svg?style=flat&logo=Jest&logoColor=white" alt="Jest">
+	<img src="https://img.shields.io/badge/Sequelize-52B0E7.svg?style=flat&logo=Sequelize&logoColor=white" alt="Sequelize">
+	<img src="https://img.shields.io/badge/Prisma-2D3748.svg?style=flat&logo=Prisma&logoColor=white" alt="Prisma">
+	<img src="https://img.shields.io/badge/Docker-2496ED.svg?style=flat&logo=Docker&logoColor=white" alt="Docker">
+	<img src="https://img.shields.io/badge/Express-000000.svg?style=flat&logo=Express&logoColor=white" alt="Express">
+	<img src="https://img.shields.io/badge/JSON-000000.svg?style=flat&logo=JSON&logoColor=white" alt="JSON">
+</p>
 
-# Projeto de Processamento de Faturas
+<br>
 
-Este projeto processa faturas em PDF e salva os dados extraídos em um banco de dados PostgreSQL, além de expor rotas para manipulação de clientes e faturas.
+#####  Indices
 
+- [Overview](#overview)
+- [Features](#features)
+- [Repository Structure](#repository-structure)
+- [Modules](#modules)
+- [Getting Started](#getting-started)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Tests](#tests)
+- [Project Roadmap](#project-roadmap)
 
-## Instalação
+---
 
-Instale lumi-back com npm
+##  Overview
 
-```bash
-  npm install lumi-back
-  cd lumi-back
-  npm install
+<code>❯ Projeto focado em interpretar faturas em pdf e disponibilizar o os dados</code>
+
+---
+
+##  Features
+
+<code>❯ 
+- CRUD simples para cadastrar usuários e faturas
+- Parser que interpreta o pdf para salvar a fatura no banco Postgres
+- Pagina de Dashboard com graficos que exibe os consumos medios e totais dos clientes totais e individualmente
+- Pagina com listagem de clientes e faturas onde é possível ter acesso aos arquivos disponibilizados em um bucket google
+</code>
+
+---
+
+##  Repository Structure
+
+```sh
+└── lumi-back/
+    ├── Dockerfile
+    ├── README.md
+    ├── api-collection.json
+    ├── assets
+    │   ├── Faturas
+    │   ├── imagem.png
+    │   └── sample.txt
+    ├── config
+    │   ├── config.json
+    │   └── jest.config.js
+    ├── docker-compose.yml
+    ├── migrations
+    ├── models
+    │   ├── cliente.js
+    │   ├── fatura.js
+    │   └── index.js
+    ├── package-lock.json
+    ├── package.json
+    ├── pdfParser.js
+    ├── routes
+    │   ├── cliente.js
+    │   ├── fatura.js
+    │   └── upload.js
+    ├── seeders
+    ├── server.js
+    ├── swagger.js
+    ├── tests
+    ├── upload
+    └── utils
+        └── pdfParser.js
 ```
-Configure o banco de dados no arquivo .env:
-```bash
-DATABASE_URL=postgres://user:password@localhost:5432/database
-```
-Rode as migrações:
-```bash
-npx sequelize-cli db:migrate
-```
-Inicie o servidor:
-```bash
-npm start
-```
-Para rodar os testes:
-```bash
-npm test
-```
-Documentação da API
-Clientes
-Retorna todos os clientes
-http
-Copiar código
-  GET /clientes
-Parâmetro	Tipo	Descrição
-Nenhum	N/A	Nenhum parâmetro necessário.
-Retorna um cliente específico
-http
-Copiar código
-  GET /clientes/${id}
-Parâmetro	Tipo	Descrição
-id	integer	Obrigatório. O ID do cliente que você quer.
-Cria um novo cliente
-http
-Copiar código
-  POST /clientes
-Parâmetro	Tipo	Descrição
-nome	string	Obrigatório. O nome do cliente.
-email	string	Obrigatório. O e-mail do cliente.
-Atualiza um cliente
-http
-Copiar código
-  PUT /clientes/${id}
-Parâmetro	Tipo	Descrição
-id	integer	Obrigatório. O ID do cliente a ser atualizado.
-nome	string	Opcional. O novo nome do cliente.
-email	string	Opcional. O novo e-mail do cliente.
-Deleta um cliente
-http
-Copiar código
-  DELETE /clientes/${id}
-Parâmetro	Tipo	Descrição
-id	integer	Obrigatório. O ID do cliente a ser deletado.
-Faturas
-Retorna todas as faturas
-http
-Copiar código
-  GET /faturas
-Parâmetro	Tipo	Descrição
-numeroCliente	string	Opcional. Número do cliente para filtrar.
-mesReferencia	string	Opcional. Mês de referência para filtrar (MM/AAAA).
-Retorna uma fatura específica
-http
-Copiar código
-  GET /faturas/${id}
-Parâmetro	Tipo	Descrição
-id	integer	Obrigatório. O ID da fatura que você quer.
-Cria uma nova fatura
-http
-Copiar código
-  POST /faturas
-Parâmetro	Tipo	Descrição
-clienteId	integer	Obrigatório. ID do cliente relacionado à fatura.
-data_emissao	date	Obrigatório. Data de emissão da fatura.
-valor_total	float	Obrigatório. Valor total da fatura.
-numero_fatura	string	Obrigatório. Número da fatura.
-Atualiza uma fatura
-http
-Copiar código
-  PUT /faturas/${id}
-Parâmetro	Tipo	Descrição
-id	integer	Obrigatório. O ID da fatura a ser atualizada.
-data_emissao	date	Opcional. A nova data de emissão da fatura.
-valor_total	float	Opcional. O novo valor total da fatura.
-numero_fatura	string	Opcional. O novo número da fatura.
-Deleta uma fatura
-http
-Copiar código
-  DELETE /faturas/${id}
-Parâmetro	Tipo	Descrição
-id	integer	Obrigatório. O ID da fatura a ser deletada.
-Upload de PDF
-Faz o upload de um arquivo PDF e processa as faturas
-http
-Copiar código
-  POST /upload
-Parâmetro	Tipo	Descrição
-file	file	Obrigatório. O arquivo PDF a ser processado.
-Exemplo de Uso
-Upload de PDF
-Use uma ferramenta como Postman ou cURL para fazer o upload de um PDF:
 
-bash
-Copiar código
-curl -X POST http://localhost:3000/upload -F 'file=@/caminho/para/o/arquivo.pdf'
-Isso processará o PDF e salvará os dados extraídos no banco de dados.
+---
 
-Funcionalidades do Projeto
-Upload de PDFs e processamento automático dos dados extraídos.
-Testes automatizados para a extração de PDFs, rotas de clientes e faturas, além do upload de PDF.
+##  Modules
+
+<details closed><summary>.</summary>
+
+| File | Summary |
+| --- | --- |
+| [api-collection.json](https://github.com/Luan-Ligapi/lumi-back/blob/main/api-collection.json) | <code>❯ Coleção com exemplo de uso de rotas de rotas</code> |
+| [server.js](https://github.com/Luan-Ligapi/lumi-back/blob/main/server.js) | <code>❯ Arquivo motor</code> |
+| [pdfParser.js](https://github.com/Luan-Ligapi/lumi-back/blob/main/pdfParser.js) | <code>❯ Conversor de pdf para array de strings</code> |
+
+</details>
+
+
+
+
+<details closed><summary>models</summary>
+![alt text](image.png)
+</details>
+
+<details closed><summary>routes</summary>
+
+| File | Summary |
+| --- | --- |
+| [upload.js](https://github.com/Luan-Ligapi/lumi-back/blob/main/routes/upload.js) | <code>❯ Upload de faturas</code> |
+| [cliente.js](https://github.com/Luan-Ligapi/lumi-back/blob/main/routes/cliente.js) | <code>❯ crud clientes</code> |
+| [fatura.js](https://github.com/Luan-Ligapi/lumi-back/blob/main/routes/fatura.js) | <code>❯ crud faturas</code> |
+
+</details>
+
+---
+
+##  Getting Started
+
+
+###  Installation
+
+Build the project from source:
+
+1. Clone the lumi-back repository:
+```sh
+❯ git clone https://github.com/Luan-Ligapi/lumi-back
+```
+
+2. Navigate to the project directory:
+```sh
+❯ cd lumi-back
+```
+
+3. Install the required dependencies:
+```sh
+❯ npm install
+```
+
+###  Usage
+
+To run the project, execute the following command:
+
+```sh
+❯ npm start
+```
+
+###  Tests
+
+Execute the test suite using the following command:
+
+```sh
+❯ npm test
+```
+
+---
+
+##  Project Roadmap
+
+- [X] **`Task 1`**: <strike>Protótipo</strike>
+- [ ] **`Task 2`**: Ajustar parser para interpretar melhor e com mais dados, tem um bug de conversão em quem usa mais de 1000 kwh/mes.
+- [ ] **`Task 3`**: novas rotas, novos graficos, autenticação.
+
+---
+
