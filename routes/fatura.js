@@ -7,7 +7,9 @@ const { Op } = require('sequelize');  // Importa apenas os operadores do Sequeli
 router.get('/', async (req, res) => {
   const { numeroCliente, ano } = req.query;
 
-  let whereClause = {};
+  let whereClause = {
+    valor_a_pagar: { [Op.ne]: null }  // Filtrar apenas faturas com valor_a_pagar não nulo
+  };
 
   // Se o cliente for informado, buscar pelo cliente
   if (numeroCliente) {
@@ -22,22 +24,16 @@ router.get('/', async (req, res) => {
 
   // Se o ano for informado, definir o intervalo de datas para o ano solicitado
   if (ano) {
-    const startOfYear = new Date(`${ano}-01-01T00:00:00.000Z`);
-    const endOfYear = new Date(`${ano}-12-31T23:59:59.999Z`);
-    
-    // Usar 'Op.between' para o intervalo de datas
     whereClause.referencia_mes = {
       [Op.like]: `%${ano}%`
     };
-    console.log(`Procurando faturas entre ${startOfYear} e ${endOfYear}`);
+    console.log(`Procurando faturas para o ano ${ano}`);
   }
   
   try {
     const faturas = await Fatura.findAll({
-      where: whereClause  // Usar a cláusula de filtro, vazia se nenhum filtro for informado
+      where: whereClause  // Usar a cláusula de filtro
     });
-
-
 
     console.log(`Faturas encontradas: ${faturas.length}`);
     res.json(faturas);
@@ -46,6 +42,7 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: 'Erro ao buscar faturas' });
   }
 });
+
 
 
 

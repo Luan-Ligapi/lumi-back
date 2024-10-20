@@ -3,13 +3,14 @@ const router = express.Router();
 const { Fatura, FaturaDetalhes, Cliente } = require('../models');
 const { Op } = require('sequelize');
 
-// Rota para obter os dados financeiros
+// Rota unificada para obter dados financeiros e de energia
 router.get('/', async (req, res) => {
   const { numeroCliente, unidadeConsumidora, mes, ano } = req.query;
 
   try {
-    let whereClause = {};
-
+    let whereClause = {
+      valor_a_pagar: { [Op.ne]: null }  // Filtrar apenas faturas com valor_a_pagar não nulo
+    };
     // Se cliente for informado, buscar pelo cliente
     if (numeroCliente) {
       const cliente = await Cliente.findOne({ where: { numeroCliente } });
@@ -31,39 +32,46 @@ router.get('/', async (req, res) => {
       whereClause.data_emissao = { [Op.between]: [startDate, endDate] };
     }
 
-    // Buscar todas as faturas caso nenhum parâmetro seja passado
+    // Buscar todas as faturas com base nos filtros (ou sem filtros)
     const faturas = await Fatura.findAll({
       where: whereClause,
       include: [{
         model: FaturaDetalhes,
-        attributes: ['energiaEletrica_quantidade', 'energiaCompensadaGD_quantidade', 'energiaEletrica_valor', 'energiaCompensadaGD_valor']
+        attributes: ['energiaEletrica_valor', 'energiaCompensadaGD_valor', 'energiaEletrica_quantidade', 'energiaCompensadaGD_quantidade']
       }]
     });
 
-    let totalEnergiaConsumida = 0;
-    let totalValorPago = 0;
+    let totalValorSemGDR = 0;
     let totalEconomiaGDR = 0;
+    let totalEnergiaConsumida = 0;
+    let totalEnergiaCompensada = 0;
 
     faturas.forEach(fatura => {
-      const detalhes = fatura.FaturaDetalhe;
-      
-      // Verificar se há detalhes da fatura
-      if (detalhes) {
-        totalEnergiaConsumida += parseFloat(detalhes.energiaEletrica_quantidade || 0);
-        totalValorPago += parseFloat(detalhes.energiaEletrica_valor || 0);
-        totalEconomiaGDR += Math.abs(parseFloat(detalhes.energiaCompensadaGD_valor || 0));
+      if (fatura.FaturaDetalhe) {
+        // Processando valores financeiros
+        const energiaEletricaValor = parseFloat(fatura.FaturaDetalhe.energiaEletrica_valor?.replace(',', '.') || 0);
+        const energiaCompensadaGDValor = parseFloat(fatura.FaturaDetalhe.energiaCompensadaGD_valor?.replace(',', '.') || 0);
+
+        totalValorSemGDR += energiaEletricaValor;
+        totalEconomiaGDR += energiaCompensadaGDValor;
+
+        // Processando quantidades de energia
+        totalEnergiaConsumida += parseFloat(fatura.FaturaDetalhe.energiaEletrica_quantidade || 0);
+        totalEnergiaCompensada += parseFloat(fatura.FaturaDetalhe.energiaCompensadaGD_quantidade || 0);
       }
     });
 
+    // Retornar resposta combinada
     res.json({
-      totalEnergiaConsumida,
-      totalValorPago,
+      totalValorSemGDR,
       totalEconomiaGDR,
+      totalEnergiaConsumida,
+      totalEnergiaCompensada,
       faturas
     });
   } catch (error) {
-    console.error('Erro ao buscar dados financeiros:', error);
-    res.status(500).json({ error: 'Erro ao buscar dados financeiros' });
+    console.error('Erro ao buscar dados:', error);
+    res.status(500).json({ error: 'Erro ao buscar dados' });
   }
 });
 
