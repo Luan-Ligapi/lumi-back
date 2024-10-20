@@ -3,33 +3,86 @@ module.exports = (sequelize, DataTypes) => {
   const Fatura = sequelize.define('Fatura', {
     clienteId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
     },
     data_emissao: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true
     },
     valor_total: {
       type: DataTypes.FLOAT,
-      allowNull: false
+      allowNull: true
     },
     numero_fatura: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
+      allowNull: true
+    },
+    referencia_mes: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    vencimento: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    valor_a_pagar: {
+      type: DataTypes.FLOAT,
+      allowNull: true
+    },
+    classe: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    subclasse: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    modalidade_tarifaria: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    consumo_kwh: {
+      type: DataTypes.FLOAT,
+      allowNull: true
+    },
+    leitura_anterior: {
+      type: DataTypes.FLOAT,
+      allowNull: true
+    },
+    leitura_atual: {
+      type: DataTypes.FLOAT,
+      allowNull: true
+    },
+    link_pdf: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    historico_consumo: {
+      type: DataTypes.JSONB,
+      allowNull: true
+    },
+    itens_faturados: {
+      type: DataTypes.JSONB,
+      allowNull: true
+    },
+    file_name: {
+      type: DataTypes.STRING,
+      allowNull: true
     }
   }, {
-    schema: 'lumi', // Define o schema onde a tabela será criada
+    schema: 'lumi',
+    tableName: 'Faturas',
+    timestamps: true
+
   });
 
   Fatura.associate = function(models) {
     Fatura.belongsTo(models.Cliente, { foreignKey: 'clienteId' });
   };
-
-  // Função para adicionar logs de validação
-  Fatura.beforeValidate((fatura, options) => {
-    console.log('Validando fatura:', fatura);
-  });
+  Fatura.associate = function (models) {
+    Fatura.hasOne(models.FaturaDetalhes, { foreignKey: 'faturaId' });
+  };
+  
 
   return Fatura;
 };
