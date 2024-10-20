@@ -71,11 +71,18 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     schema: 'lumi',
+    tableName: 'Faturas',
+    timestamps: true
+
   });
 
   Fatura.associate = function(models) {
     Fatura.belongsTo(models.Cliente, { foreignKey: 'clienteId' });
   };
+  Fatura.associate = function (models) {
+    Fatura.hasOne(models.FaturaDetalhes, { foreignKey: 'faturaId' });
+  };
+  
 
   return Fatura;
 };

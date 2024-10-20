@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Cliente, Fatura } = require('../models');
+const { Cliente, Fatura, FaturaDetalhes } = require('../models');
 const { Op } = require('sequelize');  // Importa apenas os operadores do Sequelize
 
 // Obter todas as faturas
@@ -69,13 +69,33 @@ router.post('/', async (req, res) => {
       return res.status(404).json({ error: 'Cliente não encontrado' });
     }
 
-    const novaFatura = await Fatura.create({
+    const novaFatura = await Fatura.upsert({
       clienteId: cliente.id,
       data_emissao,
       valor_total,
       numero_fatura,
       pdf_link  // Adicionar o link do PDF
     });
+    await FaturaDetalhes.upsert({
+      faturaId: novaFatura.id,
+      energiaEletrica_valor: parseFloat(dadosFatura.valoreFaturados.energiaEletrica.valor),
+      energiaEletrica_unidade: dadosFatura.valoreFaturados.energiaEletrica.unidade,
+      energiaEletrica_precoUnit: parseFloat(dadosFatura.valoreFaturados.energiaEletrica.precoUnit),
+      energiaEletrica_quantidade: parseFloat(dadosFatura.valoreFaturados.energiaEletrica.quantidade),
+      energiaEletrica_tarifaUnit: parseFloat(dadosFatura.valoreFaturados.energiaEletrica.tarifaUnit),
+      energiaSCEESICMS_valor: parseFloat(dadosFatura.valoreFaturados.energiaSCEESICMS.valor),
+      energiaSCEESICMS_unidade: dadosFatura.valoreFaturados.energiaSCEESICMS.unidade,
+      energiaSCEESICMS_precoUnit: parseFloat(dadosFatura.valoreFaturados.energiaSCEESICMS.precoUnit),
+      energiaSCEESICMS_quantidade: parseFloat(dadosFatura.valoreFaturados.energiaSCEESICMS.quantidade),
+      energiaSCEESICMS_tarifaUnit: parseFloat(dadosFatura.valoreFaturados.energiaSCEESICMS.tarifaUnit),
+      energiaCompensadaGD_valor: parseFloat(dadosFatura.valoreFaturados.energiaCompensadaGD.valor),
+      energiaCompensadaGD_unidade: dadosFatura.valoreFaturados.energiaCompensadaGD.unidade,
+      energiaCompensadaGD_precoUnit: parseFloat(dadosFatura.valoreFaturados.energiaCompensadaGD.precoUnit),
+      energiaCompensadaGD_quantidade: parseFloat(dadosFatura.valoreFaturados.energiaCompensadaGD.quantidade),
+      energiaCompensadaGD_tarifaUnit: parseFloat(dadosFatura.valoreFaturados.energiaCompensadaGD.tarifaUnit),
+      contribuicaoIluminacao: parseFloat(dadosFatura.valoreFaturados.contribuicaoIluminacao)
+    });
+    
 
     console.log('Fatura criada com sucesso:', novaFatura);
     return res.status(201).json(novaFatura);
