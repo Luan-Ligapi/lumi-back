@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
 
     // Se mes e ano forem informados, adicionar intervalo de datas ao filtro
     if (ano) {
-      whereClause.data_emissao = { [Op.like]: `%${ano}%` };
+      whereClause.referencia_mes = { [Op.like]: `%${ano}%` };
     }
 
     // Buscar todas as faturas com base nos filtros
